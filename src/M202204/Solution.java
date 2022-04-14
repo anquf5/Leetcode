@@ -1,6 +1,6 @@
+package M202204;
+
 import java.util.*;
-
-
 
 // Definition for singly-linked list.
 //class ListNode {
@@ -13,7 +13,7 @@ import java.util.*;
 
 class Solution {
 
-    //2022-04-14
+    //04-14
     // 986. Interval List Intersections
 //    public static int[][] intervalIntersection(int[][] firstList, int[][] secondList) {
 //        int p1 = 0, p2 = 0;
@@ -39,5 +39,3 @@ class Solution {
 
     }
 }
-
-
