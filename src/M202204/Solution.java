@@ -99,7 +99,7 @@ class Solution {
 
     //04-15
     //91. Decode Ways
-    // First Solution - low efficient
+    // Approach 1 - low efficient
 //    public static int numDecodings(String s) {
 //        Set<String> key = new HashSet<>();
 //        for(int i = 1; i < 27; i++) key.add(""+ i);
@@ -122,7 +122,7 @@ class Solution {
 //        }
 //        return dp[n-1][0] + dp[n-1][1];
 //    }
-
+    // Approach 2 - Accept
     public static int numDecodings(String s) {
         int n = s.length();
         if(n == 0 || s.charAt(0) == '0') return 0;
@@ -199,66 +199,152 @@ class Solution {
 //    }
 
     //130. Surrounded Regions
-    public static void solve(char[][] board) {
-        int m = board.length;
-        int n = board[0].length;
-        int[][] route = new int[m][n];
-        int[][] mark = new int[m][n];
-        for (int i = 0; i < m; i++) {
-            if(board[i][0] == 'O') {
-                dfs(board, i, 0, route, mark);
-            }
-            if(board[i][n-1] == 'O'){
-                dfs(board, i, n-1, route, mark);
-            }
-        }
-        for (int i = 0; i < n; i++) {
-            if(board[0][i] == 'O') {
-                dfs(board, 0, i, route, mark);
-            }
-            if (board[m-1][i] == 'O') {
-                dfs(board, m-1, i, route, mark);
-            }
-        }
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0]. length; j++) {
-                if(board[i][j] == 'X') continue;
-                else{
-                    if(mark[i][j] != 1) board[i][j] = 'X';
+//    public static void solve(char[][] board) {
+//        int m = board.length;
+//        int n = board[0].length;
+//        int[][] route = new int[m][n];
+//        int[][] mark = new int[m][n];
+//        for (int i = 0; i < m; i++) {
+//            if(board[i][0] == 'O') {
+//                dfs(board, i, 0, route, mark);
+//            }
+//            if(board[i][n-1] == 'O'){
+//                dfs(board, i, n-1, route, mark);
+//            }
+//        }
+//        for (int i = 0; i < n; i++) {
+//            if(board[0][i] == 'O') {
+//                dfs(board, 0, i, route, mark);
+//            }
+//            if (board[m-1][i] == 'O') {
+//                dfs(board, m-1, i, route, mark);
+//            }
+//        }
+//        for (int i = 0; i < board.length; i++) {
+//            for (int j = 0; j < board[0]. length; j++) {
+//                if(board[i][j] == 'X') continue;
+//                else{
+//                    if(mark[i][j] != 1) board[i][j] = 'X';
+//                }
+//            }
+//        }
+//    }
+//    static void dfs(char[][] board, int a, int b, int[][] route, int[][] mark){
+//        if(a < 0 || b < 0 || a >= board.length || b>= board[0].length) return;
+//        if(route[a][b] == 1) return;
+//        route[a][b] = 1;
+//        if(board[a][b] == 'O') {
+//            mark[a][b] = 1;
+//            dfs(board, a-1, b, route, mark);
+//            dfs(board, a, b-1, route, mark);
+//            dfs(board, a+1, b, route, mark);
+//            dfs(board, a, b+1, route, mark);
+//        }
+//        else return;
+//    }
+
+    // 713. Subarray Product Less Than K
+    // Approach 1. DFS -- Time Limit Exceeded
+//    public static int numSubarrayProductLessThanK(int[] nums, int k) {
+//        if(k == 0) return 0;
+//        int res = 0;
+//        for (int i = 0; i < nums.length; i++) {
+//            if(nums[i] < k){
+//                res++;
+//                int prod = nums[i];
+//                res = dfs(i + 1, res, prod, nums, k);
+//            }
+//        }
+//        return res;
+//    }
+//
+//    static int dfs(int cur, int res, int prod, int[] nums, int k){
+//        if(cur >= nums.length) return res;
+//        prod *= nums[cur];
+//        if(prod >= k){
+//            return res;
+//        }
+//        else{
+//            res++;
+//            cur++;
+//            return dfs(cur, res, prod, nums, k);
+//        }
+//    }
+
+    // Approach 2 Sliding Window
+//    public int numSubarrayProductLessThanK(int[] nums, int k) {
+//        if(k < 1) return 0;
+//        int prod = 1, l = 0, res = 0;
+//        for (int i = 0; i < nums.length; i++) {
+//            prod *= nums[i];
+//            while(prod >= k) {
+//                prod /= nums[l++];
+//            }
+//            res += i - l + 1;
+//        }
+//        return res;
+//    }
+
+    // 209. Minimum Size Subarray Sum
+//    public static int minSubArrayLen(int target, int[] nums) {
+//        int res = nums.length + 1, l = 0, sum = 0;
+//        for (int i = 0; i < nums.length; i++) {
+//            sum += nums[i];
+//            while(sum >= target){
+//                res = Math.min(i-l+1, res);
+//                sum -= nums[l++];
+//            }
+//        }
+//        return res == nums.length + 1 ? 0 : res;
+//    }
+
+    // 547. Number of Provinces
+//    public static int findCircleNum(int[][] isConnected) {
+//        int m = isConnected.length;
+//        int[] flag = new int[m];
+//        int res = 0;
+//        for (int i = 0; i < m; i++) {
+//            if(flag[i] == 1) continue;
+//            res++;
+//            dfs(isConnected, i, flag, m);
+//        }
+//        return res;
+//    }
+//    static void dfs(int[][] isConnected, int a, int[] flag, int m){
+//        if(flag[a] == 1) return;
+//        for (int i = 0; i < m; i++) {
+//            if(i == a) {
+//                flag[i] = 1;
+//                continue;
+//            }
+//            if(isConnected[a][i] == 1){
+//                dfs(isConnected, i, flag, m);
+//            }
+//        }
+//    }
+
+    //300. Longest Increasing Subsequence
+    public static int lengthOfLIS(int[] nums) {
+        int[] dp = new int[nums.length];
+        int max = 1;
+        Arrays.fill(dp,1);
+        for (int i = 1; i < nums.length; i++) {
+            for (int j = i - 1; j >= 0; j--) {
+                if(nums[i] > nums[j]) {
+                    dp[i] = Math.max(dp[j] + 1, dp[i]);
+                    max = Math.max(dp[i], max);
                 }
             }
         }
-    }
-    static void dfs(char[][] board, int a, int b, int[][] route, int[][] mark){
-        if(a < 0 || b < 0 || a >= board.length || b>= board[0].length) return;
-        if(route[a][b] == 1) return;
-        route[a][b] = 1;
-        if(board[a][b] == 'O') {
-            mark[a][b] = 1;
-            dfs(board, a-1, b, route, mark);
-            dfs(board, a, b-1, route, mark);
-            dfs(board, a+1, b, route, mark);
-            dfs(board, a, b+1, route, mark);
-        }
-        else return;
+        return max;
     }
 
     public static void main(String[] args) {
-        char[][] test = new char[][]{{'X','O','X','O','X','O'},{'O','X','O','X','O','X'},{'X','O','X','O','X','O'},{'O','X','O','X','O','X'}};
-        System.out.println("-------start--------");
-        for (int i = 0; i < test.length; i++) {
-            for (int j = 0; j < test[0].length; j++) {
-                System.out.print(test[i][j] + ", ");
-            }
-            System.out.println();
-        }
-        solve(test);
-        System.out.println("-------finish------");
-        for (int i = 0; i < test.length; i++) {
-            for (int j = 0; j < test[0].length; j++) {
-                System.out.print(test[i][j] + ", ");
-            }
-            System.out.println();
-        }
+        int[] test = {10,9,2,5,3,7,101,18};
+        int[] test1 = {0,1,0,3,2,3};
+        int[] test2 = {7,7,7,7,7,7,7};
+        int[] test3 ={4,10,4,3,8,9};
+        int[] test4 = {10,9,2,5,3,7,101,18};
+        System.out.println(lengthOfLIS(test4));
     }
 }
