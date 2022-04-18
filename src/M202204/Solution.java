@@ -13,6 +13,26 @@ import java.util.*;
 //    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
 //}
 
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node next;
+
+    public Node() {}
+
+    public Node(int _val) {
+        val = _val;
+    }
+
+    public Node(int _val, Node _left, Node _right, Node _next) {
+        val = _val;
+        left = _left;
+        right = _right;
+        next = _next;
+    }
+}
+
 class Solution {
 
     //04-14
@@ -48,35 +68,32 @@ class Solution {
     }
 
     //438. Find All Anagrams in a String
-    // *** required to consider
     public static List<Integer> findAnagrams(String s, String p) {
-        List<Integer> res = new ArrayList<>();
         Map<Character, Integer> key = new HashMap<>();
-        int pLen = p.length();
-        for(char c : p.toCharArray()) key.put(c,0);
-        Queue<Integer> qs = new LinkedList<>();
-        char[] char_s = s.toCharArray();
-        for(int i = 0; i < s.length(); i++){
-            if(key.containsKey(char_s[i])) {
-                if(key.get(char_s[i]) == 0){
-                    qs.add(i);
-                    key.put(char_s[i], 1);
-                }
-                else{
-                    qs.remove();
-                    continue;
-                }
-                if(qs.size() == pLen){
-                    key.put(char_s[qs.element()], 0);
-                    res.add(qs.remove());
-                }
-            }else{
-                qs.clear();
-                continue;
-            }
+        Map<Character, Integer> smap = new HashMap<>();
+        List<Integer> res = new LinkedList<>();
+        for(char ch : p.toCharArray()){
+            if(key.containsKey(ch)) key.put(ch, key.get(ch)+1);
+            else key.put(ch,1);
         }
-        System.out.println(res.toString());
-        return null;
+        int startIndex = 0, endIndex = 0;
+        while(endIndex < s.length()){
+            if(smap.containsKey(s.charAt(endIndex))) smap.put(s.charAt(endIndex), smap.get(s.charAt(endIndex)) + 1);
+            else smap.put(s.charAt(endIndex), 1);
+
+            if(endIndex - startIndex + 1 == p.length()){
+                if(smap.equals(key)){
+                    res.add(startIndex);
+                }
+                if(smap.containsKey(s.charAt(startIndex))){
+                    if(smap.get(s.charAt(startIndex)) == 1) smap.remove(s.charAt(startIndex));
+                    else smap.put(s.charAt(startIndex), smap.get(s.charAt(startIndex)) - 1);
+                }
+                startIndex++;
+            }
+            endIndex++;
+        }
+        return res;
     }
 
     //322. Coin Change
@@ -323,6 +340,7 @@ class Solution {
 //        }
 //    }
 
+    // 2022-04-17
     //300. Longest Increasing Subsequence
     public static int lengthOfLIS(int[] nums) {
         int[] dp = new int[nums.length];
@@ -339,12 +357,94 @@ class Solution {
         return max;
     }
 
+    //139. Word Break
+//    public static boolean wordBreak(String s, List<String> wordDict) {
+//        Set<String> key = new HashSet<>(wordDict);
+//        boolean[] dp = new boolean[s.length() + 1];
+//        dp[0] = true;
+//        for (int i = 1; i < dp.length; i++) {
+//            for(int j = i - 1; j >= 0; j--){
+//                if(dp[j] && key.contains(s.substring(j,i))){
+//                    dp[i] = true;
+//                    break;
+//                }
+//            }
+//        }
+//        return dp[s.length()];
+//    }
+
+    //673. Number of Longest Increasing Subsequence
+    // Haven't solved
+//    public static int findNumberOfLIS(int[] nums) {
+//        int[][] dp = new int[nums.length][2];
+//        // dp[][0] - max dp[][1] count
+//        dp[0][0] = 1;
+//        dp[0][1] = 1;
+//        int maxLen = 1;
+//        List<Integer> maxLenIndex = new ArrayList<>();
+//        for (int i = 1; i < nums.length; i++) {
+//            for (int j = 0; j < i; j++) {
+//                if(nums[i] > nums[j]){
+//                    dp[i][0] = dp[j][0]+1;
+//                    if(dp[j][0] == maxLen){
+//                        if( dp[i][0] == maxLen + 1){
+//                            dp[i][]
+//                        }
+//                        dp[i][1] = dp[j][1];
+//                    }
+//                }
+//            }
+//
+//        }
+//        return 0;
+//    }
+
+    //2022-04-18
+    // 117. Populating Next Right Pointers in Each Node II
+//    public Node connect(Node root) {
+//        if(root == null) return root;
+//        Queue<Node> queue = new LinkedList<>();
+//        queue.add(root);
+//        while(queue.size() > 0){
+//            int size = queue.size();
+//            for (int i = 0; i < size; i++){
+//                Node node = queue.poll();
+//                if(i < size - 1) node.next = queue.peek();
+//                if(node.left != null) queue.add(node.left);
+//                if(node.right != null) queue.add(node.right);
+//            }
+//        }
+//        return root;
+//    }
+
+    // Recursive approach
+    public Node connect(Node root) {
+        if(root == null) return root;
+        if(root.left != null && root.right != null){
+            root.left.next = root.right;
+        }
+        if(root.left != null && root.right == null){
+            root.left.next = getConnection(root.next);
+        }
+        if(root.right != null){
+            root.right.next = getConnection(root.next);
+        }
+        connect(root.right);
+        connect(root.left);
+        return root;
+    }
+    Node getConnection(Node root){
+        if(root == null) return null;
+        if(root.left != null) return root.left;
+        if(root.right != null) return root.right;
+        if(root.next != null) return getConnection(root.next);
+        return null;
+    }
+
+
     public static void main(String[] args) {
-        int[] test = {10,9,2,5,3,7,101,18};
-        int[] test1 = {0,1,0,3,2,3};
-        int[] test2 = {7,7,7,7,7,7,7};
-        int[] test3 ={4,10,4,3,8,9};
-        int[] test4 = {10,9,2,5,3,7,101,18};
-        System.out.println(lengthOfLIS(test4));
+        String s1 = "cbaebabacd";
+        String s2 = "abc";
+        System.out.println(findAnagrams(s1,s2).toString());
     }
 }
