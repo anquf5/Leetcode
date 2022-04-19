@@ -2,6 +2,7 @@ package M202204;
 
 import groovyjarjarantlr4.runtime.tree.Tree;
 
+import javax.naming.spi.StateFactory;
 import java.util.*;
 
 // Definition for singly-linked list.
@@ -13,106 +14,125 @@ import java.util.*;
 //    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
 //}
 
-class Node {
-    public int val;
-    public Node left;
-    public Node right;
-    public Node next;
+//class Node {
+//    public int val;
+//    public Node left;
+//    public Node right;
+//    public Node next;
+//
+//    public Node() {}
+//
+//    public Node(int _val) {
+//        val = _val;
+//    }
+//
+//    public Node(int _val, Node _left, Node _right, Node _next) {
+//        val = _val;
+//        left = _left;
+//        right = _right;
+//        next = _next;
+//    }
+//}
 
-    public Node() {}
 
-    public Node(int _val) {
-        val = _val;
-    }
-
-    public Node(int _val, Node _left, Node _right, Node _next) {
-        val = _val;
-        left = _left;
-        right = _right;
-        next = _next;
-    }
+// Definition for a binary tree node.
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int x) { val = x; }
 }
+
+
+ //Definition for singly-linked list.
+//class ListNode {
+//    int val;
+//    ListNode next;
+//    ListNode() {}
+//    ListNode(int val) { this.val = val; }
+//    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+//}
 
 class Solution {
 
     //04-14
     // 986. Interval List Intersections
-    public static int[][] intervalIntersection(int[][] firstList, int[][] secondList) {
-        int p1 = 0, p2 = 0;
-        List<int[]> res = new ArrayList<>();
-        while(p1 < firstList.length && p2 < secondList.length){
-            int lo = Math.max(firstList[p1][0], secondList[p2][0]);
-            int hi = Math.min(firstList[p1][1], secondList[p2][1]);
-            if(lo <= hi) res.add(new int[]{lo,hi});
-            if(firstList[p1][1] < secondList[p2][1]) p1++;
-            else p2++;
-        }
-        return res.toArray(new int[res.size()][]);
-    }
+//    public static int[][] intervalIntersection(int[][] firstList, int[][] secondList) {
+//        int p1 = 0, p2 = 0;
+//        List<int[]> res = new ArrayList<>();
+//        while(p1 < firstList.length && p2 < secondList.length){
+//            int lo = Math.max(firstList[p1][0], secondList[p2][0]);
+//            int hi = Math.min(firstList[p1][1], secondList[p2][1]);
+//            if(lo <= hi) res.add(new int[]{lo,hi});
+//            if(firstList[p1][1] < secondList[p2][1]) p1++;
+//            else p2++;
+//        }
+//        return res.toArray(new int[res.size()][]);
+//    }
 
     // 11. Container With Most Water
-    public int maxArea(int[] height) {
-        int n = height.length;
-        int area = Math.min(height[n-1], height[0]) * (n - 1);
-        int l = 0, r = n - 1;
-        while(l < r){
-            if(height[l] < height[r]) {
-                l++;
-                area = Math.max(area, Math.min(height[r], height[l]) * (r - l));
-            }else{
-                r--;
-                area = Math.max(area, Math.min(height[r], height[l]) * (r - l));
-            }
-        }
-        return area;
-    }
+//    public int maxArea(int[] height) {
+//        int n = height.length;
+//        int area = Math.min(height[n-1], height[0]) * (n - 1);
+//        int l = 0, r = n - 1;
+//        while(l < r){
+//            if(height[l] < height[r]) {
+//                l++;
+//                area = Math.max(area, Math.min(height[r], height[l]) * (r - l));
+//            }else{
+//                r--;
+//                area = Math.max(area, Math.min(height[r], height[l]) * (r - l));
+//            }
+//        }
+//        return area;
+//    }
 
     //438. Find All Anagrams in a String
-    public static List<Integer> findAnagrams(String s, String p) {
-        Map<Character, Integer> key = new HashMap<>();
-        Map<Character, Integer> smap = new HashMap<>();
-        List<Integer> res = new LinkedList<>();
-        for(char ch : p.toCharArray()){
-            if(key.containsKey(ch)) key.put(ch, key.get(ch)+1);
-            else key.put(ch,1);
-        }
-        int startIndex = 0, endIndex = 0;
-        while(endIndex < s.length()){
-            if(smap.containsKey(s.charAt(endIndex))) smap.put(s.charAt(endIndex), smap.get(s.charAt(endIndex)) + 1);
-            else smap.put(s.charAt(endIndex), 1);
-
-            if(endIndex - startIndex + 1 == p.length()){
-                if(smap.equals(key)){
-                    res.add(startIndex);
-                }
-                if(smap.containsKey(s.charAt(startIndex))){
-                    if(smap.get(s.charAt(startIndex)) == 1) smap.remove(s.charAt(startIndex));
-                    else smap.put(s.charAt(startIndex), smap.get(s.charAt(startIndex)) - 1);
-                }
-                startIndex++;
-            }
-            endIndex++;
-        }
-        return res;
-    }
+//    public static List<Integer> findAnagrams(String s, String p) {
+//        Map<Character, Integer> key = new HashMap<>();
+//        Map<Character, Integer> smap = new HashMap<>();
+//        List<Integer> res = new LinkedList<>();
+//        for(char ch : p.toCharArray()){
+//            if(key.containsKey(ch)) key.put(ch, key.get(ch)+1);
+//            else key.put(ch,1);
+//        }
+//        int startIndex = 0, endIndex = 0;
+//        while(endIndex < s.length()){
+//            if(smap.containsKey(s.charAt(endIndex))) smap.put(s.charAt(endIndex), smap.get(s.charAt(endIndex)) + 1);
+//            else smap.put(s.charAt(endIndex), 1);
+//
+//            if(endIndex - startIndex + 1 == p.length()){
+//                if(smap.equals(key)){
+//                    res.add(startIndex);
+//                }
+//                if(smap.containsKey(s.charAt(startIndex))){
+//                    if(smap.get(s.charAt(startIndex)) == 1) smap.remove(s.charAt(startIndex));
+//                    else smap.put(s.charAt(startIndex), smap.get(s.charAt(startIndex)) - 1);
+//                }
+//                startIndex++;
+//            }
+//            endIndex++;
+//        }
+//        return res;
+//    }
 
     //322. Coin Change
-    public int coinChange(int[] coins, int amount) {
-        if(amount == 0) return 0;
-        int[] dp = new int[amount + 1];
-        Arrays.fill(dp, amount+1);
-        for (int i = 1; i <= amount; i++) {
-            for(int j = coins.length - 1; j >= 0; j--){
-                if(i == coins[j]) dp[i] = 1;
-                else if(i < coins[j]) continue;
-                else{
-                    if(dp[i - coins[j]] != amount + 1) dp[i] = Math.min(dp[i-coins[j]] + 1, dp[i]);
-                }
-            }
-        }
-        if(dp[amount] != amount + 1) return dp[amount];
-        else return -1;
-    }
+//    public int coinChange(int[] coins, int amount) {
+//        if(amount == 0) return 0;
+//        int[] dp = new int[amount + 1];
+//        Arrays.fill(dp, amount+1);
+//        for (int i = 1; i <= amount; i++) {
+//            for(int j = coins.length - 1; j >= 0; j--){
+//                if(i == coins[j]) dp[i] = 1;
+//                else if(i < coins[j]) continue;
+//                else{
+//                    if(dp[i - coins[j]] != amount + 1) dp[i] = Math.min(dp[i-coins[j]] + 1, dp[i]);
+//                }
+//            }
+//        }
+//        if(dp[amount] != amount + 1) return dp[amount];
+//        else return -1;
+//    }
 
     //04-15
     //91. Decode Ways
@@ -140,20 +160,20 @@ class Solution {
 //        return dp[n-1][0] + dp[n-1][1];
 //    }
     // Approach 2 - Accept
-    public static int numDecodings(String s) {
-        int n = s.length();
-        if(n == 0 || s.charAt(0) == '0') return 0;
-        if(n <= 2 && Integer.parseInt(s) <= 26) return n;
-        int[] dp = new int[n + 1];
-        dp[0] = 1;
-        dp[1] = 1;
-        for (int i = 2; i < n + 1; i++) {
-            if(s.charAt(i) != '0') dp[i] = dp[i-1];
-            int twoDigits = Integer.parseInt(s.substring(i-2, i));
-            if(twoDigits >= 10 && twoDigits <= 26) dp[i] += dp[i-2];
-        }
-        return dp[n];
-    }
+//    public static int numDecodings(String s) {
+//        int n = s.length();
+//        if(n == 0 || s.charAt(0) == '0') return 0;
+//        if(n <= 2 && Integer.parseInt(s) <= 26) return n;
+//        int[] dp = new int[n + 1];
+//        dp[0] = 1;
+//        dp[1] = 1;
+//        for (int i = 2; i < n + 1; i++) {
+//            if(s.charAt(i) != '0') dp[i] = dp[i-1];
+//            int twoDigits = Integer.parseInt(s.substring(i-2, i));
+//            if(twoDigits >= 10 && twoDigits <= 26) dp[i] += dp[i-2];
+//        }
+//        return dp[n];
+//    }
 
     //200. Number of Islands
 //    void dfs(char[][] grid, int r, int c){
@@ -182,24 +202,24 @@ class Solution {
 
     //100. Same Tree
     // Definition for a binary tree node.
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-        TreeNode() {}
-        TreeNode(int val) { this.val = val; }
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
-        public boolean isSameTree(TreeNode p, TreeNode q) {
-            if(p == null && q == null) return true;
-            if(p == null || q == null) return false;
-            if(p.val != q.val) return false;
-            return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
-        }
-     }
+//    public class TreeNode {
+//        int val;
+//        TreeNode left;
+//        TreeNode right;
+//        TreeNode() {}
+//        TreeNode(int val) { this.val = val; }
+//        TreeNode(int val, TreeNode left, TreeNode right) {
+//            this.val = val;
+//            this.left = left;
+//            this.right = right;
+//        }
+//        public boolean isSameTree(TreeNode p, TreeNode q) {
+//            if(p == null && q == null) return true;
+//            if(p == null || q == null) return false;
+//            if(p.val != q.val) return false;
+//            return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+//        }
+//     }
 
      //572. Subtree of Another Tree
 //    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
@@ -418,33 +438,130 @@ class Solution {
 //    }
 
     // Recursive approach
-    public Node connect(Node root) {
-        if(root == null) return root;
-        if(root.left != null && root.right != null){
-            root.left.next = root.right;
+//    public Node connect(Node root) {
+//        if(root == null) return root;
+//        if(root.left != null && root.right != null){
+//            root.left.next = root.right;
+//        }
+//        if(root.left != null && root.right == null){
+//            root.left.next = getConnection(root.next);
+//        }
+//        if(root.right != null){
+//            root.right.next = getConnection(root.next);
+//        }
+//        connect(root.right);
+//        connect(root.left);
+//        return root;
+//    }
+//    Node getConnection(Node root){
+//        if(root == null) return null;
+//        if(root.left != null) return root.left;
+//        if(root.right != null) return root.right;
+//        if(root.next != null) return getConnection(root.next);
+//        return null;
+//    }
+
+    //04-19
+    //74. Search a 2D Matrix
+    public static boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix.length == 1 && matrix[0].length == 1) return matrix[0][0] == target;
+        int len = matrix.length - 1, wid = matrix[0].length - 1;
+        int l = 0, r = len;
+        int x = 0;
+        while(l <= r){
+            int m = (l + r) / 2;
+            if(matrix[m][0] == target
+                    || matrix[l][0] == target
+                    || matrix[r][0] == target
+                    || matrix[l][wid] == target
+                    || matrix[r][wid] == target) return true;
+            if(matrix[m][0] > target){
+                if(l == m){
+                    x = l;
+                    break;
+                }
+                if(matrix[m - 1][0] > target) r = m - 1;
+                else{
+                    x = m - 1;
+                    break;
+                }
+            }
+            else{
+                if(r == m) {
+                    x = r;
+                    break;
+                }
+                if(matrix[m][wid] < target) l = m + 1;
+                else {
+                    x = m;
+                    break;
+                }
+            }
         }
-        if(root.left != null && root.right == null){
-            root.left.next = getConnection(root.next);
+        l = 0; r = wid;
+        while(l <= r){
+            int m = (l + r) / 2;
+            if(matrix[x][m] == target) return true;
+            if(matrix[x][m] > target) r = m - 1;
+            else l = m + 1;
         }
-        if(root.right != null){
-            root.right.next = getConnection(root.next);
-        }
-        connect(root.right);
-        connect(root.left);
-        return root;
+        return false;
     }
-    Node getConnection(Node root){
-        if(root == null) return null;
-        if(root.left != null) return root.left;
-        if(root.right != null) return root.right;
-        if(root.next != null) return getConnection(root.next);
-        return null;
-    }
+
+    //494. Target Sum
+    // Approach 1: Time Limit Exceeded
+//    public static int findTargetSumWays(int[] nums, int target) {
+//        if(nums.length == 1) return nums[0] == target || nums[0] == -target ? 1 : 0;
+//        Map<Integer, List<Integer>> dp = new HashMap<>();
+//        List<Integer> start = new LinkedList<>();
+//        start.add(nums[0]);
+//        start.add(-nums[0]);
+//        dp.put(0, start);
+//        int sum = 0;
+//        for (int i = 1; i < nums.length; i++) {
+//            int pos = nums[i];
+//            int neg = -nums[i];
+//            List<Integer> cur = new LinkedList<>();
+//            for(Integer j : dp.get(i-1)){
+//                if(i == nums.length - 1){
+//                    if(j + pos == target) sum++;
+//                    if(j + neg == target) sum++;
+//                }else{
+//                    cur.add(j + pos);
+//                    cur.add(j + neg);
+//                    dp.put(i, cur);
+//                }
+//            }
+//        }
+//        return sum;
+//    }
+
+    // Approach 2 Accepted
+//    public static int findTargetSumWays(int[] nums, int target) {
+//        if(nums.length == 1) return nums[0] == target || nums[0] == -target ? 1 : 0;
+//        int total = Arrays.stream(nums).sum();
+//        if(Math.abs(target) > total) return 0;
+//        int[][] dp = new int[nums.length][2 * total + 1];
+//        dp[0][nums[0] + total] = 1;
+//        dp[0][-nums[0] + total]++;
+//        for (int i = 1; i < nums.length; i++) {
+//            for(int j = -total; j < total + 1; j++){
+//                if(dp[i-1][j + total] != 0){
+//                    dp[i][j + total + nums[i]] += dp[i-1][j + total];
+//                    dp[i][j + total - nums[i]] += dp[i-1][j + total];
+//                }
+//            }
+//        }
+//        return dp[nums.length-1][target + total];
+//    }
+
+    //236. Lowest Common Ancestor of a Binary Tree
+
+
 
 
     public static void main(String[] args) {
-        String s1 = "cbaebabacd";
-        String s2 = "abc";
-        System.out.println(findAnagrams(s1,s2).toString());
+        int[] test1 = {1,1,1,1,1};
+        int[] test2 = {1};
     }
 }
