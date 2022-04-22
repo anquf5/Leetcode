@@ -555,13 +555,84 @@ class Solution {
 //        return dp[nums.length-1][target + total];
 //    }
 
-    //236. Lowest Common Ancestor of a Binary Tree
+    //04-20
+    //55. Jump Game
+    public static boolean canJump(int[] nums) {
+        int maxLen = 0;
+        int i = 0;
+        while(i < nums.length && i <= maxLen){
+            maxLen = Math.max(nums[i] + i, maxLen);
+            if(maxLen >= nums.length - 1) return true;
+            else i++;
+        }
+        return false;
+    }
+
+    //5. Longest Palindromic Substring
+    public static String longestPalindrome(String s) {
+        if(s.length() < 2) return s;
+        int sLen = s.length();
+        boolean[][] dp = new boolean[sLen][sLen];
+        dp[0][0] = true;
+        int maxLen = 1;
+        int maxStart = 0;
+        for (int i = 1; i < sLen; i++) {
+            dp[i][i] = true;
+            if(s.charAt(i) == s.charAt(i-1)) {
+                dp[i-1][i] = true;
+                maxLen = 2;
+                maxStart = i-1;
+            }
+        }
+        for (int i = 1; i < sLen; i++) {
+            for (int j = 0; j < i - 1; j++) {
+                dp[j][i] = dp[j+1][i-1] && s.charAt(j) == s.charAt(i);
+                if(dp[j][i] && i - j + 1 > maxLen){
+                    maxLen = i - j + 1;
+                    maxStart = j;
+                }
+            }
+        }
+        return s.substring(maxStart, maxStart + maxLen);
+    }
+
+    //  04-21
+    // 264. Ugly Number II
+    public int nthUglyNumber(int n) {
+        int[] dp = new int[n];
+        dp[0] = 1;
+        int n2 = 0, n3 = 0, n5 = 0;
+        for (int i = 1; i < n; i++) {
+            dp[i] = Math.min(dp[n2]*2,(Math.min(dp[n3]*3,dp[n5]*5)));
+            if(dp[i] == dp[n2] * 2) n2++;
+            if(dp[i] == dp[n3] * 3) n3++;
+            if(dp[i] == dp[n5] * 5) n5++;
+        }
+        return dp[n-1];
+    }
+    //42. Trapping Rain Water
+    public int trap(int[] height) {
+        int[] dp = new int[height.length];
+        dp[0] = 0;
+        int l = 0;
+        int i = 0;
+        int button = 0;
+        while(i < height.length){
+
+        }
+        return 0;
+    }
+
+
 
 
 
 
     public static void main(String[] args) {
-        int[] test1 = {1,1,1,1,1};
-        int[] test2 = {1};
+        String s1 = "babad";
+        String s2 = "cbbd";
+        String s3 = "ac";
+        String s4 = "ccc";
+        System.out.println(longestPalindrome(s4));
     }
 }
