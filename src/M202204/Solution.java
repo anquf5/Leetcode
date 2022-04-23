@@ -655,9 +655,140 @@ class Solution {
         return dp[m-1][n-1];
     }
 
+    //04-23
+    //45. Jump Game II
+    public static int jump(int[] nums) {
+        int n = nums.length;
+        if(n == 1) return 0;
+        int[] dp = new int[n];
+        Arrays.fill(dp, n);
+        dp[0] = 0;
+        for (int i = 0; i < n; i++) {
+            if(nums[i] + i >= n - 1 ){
+                return dp[i] + 1;
+            }
+            else{
+                for (int j = i + 1; j <= nums[i] + i ; j++) {
+                    dp[j] = Math.min(dp[i] + 1, dp[j]);
+                }
+            }
+        }
+        return dp[n];
+    }
+
+    //63. Unique Paths II
+    public static int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int m = obstacleGrid.length, n = obstacleGrid[0].length;
+        int[][] dp = new int[m][n];
+        dp[0][0] = obstacleGrid[0][0] == 1 ? 0 : 1;
+        for (int i = 1; i < m; i++) {
+            if(obstacleGrid[i][0] == 1) dp[i][0] = 0;
+            else dp[i][0] = dp[i-1][0];
+        }
+        for (int i = 1; i < n; i++) {
+            if(obstacleGrid[0][i] == 1) dp[0][i] = 0;
+            else dp[0][i] = dp[0][i-1];
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if(obstacleGrid[i][j] == 1) dp[i][j] = 0;
+                else dp[i][j] = dp[i-1][j] + dp[i][j-1];
+            }
+        }
+        return dp[m-1][n-1];
+    }
+
+    //96. Unique Binary Search Trees
+    // ***
+    public static int numTrees(int n) {
+        int[] dp = new int[n+1];
+        dp[0] = 0;
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            for (int j = 1; j <= i; j++) {
+                dp[i] += dp[j-1]*dp[i-j];
+            }
+        }
+        return dp[n];
+    }
+
+    //70. Climbing Stairs
+    public int climbStairs(int n) {
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            dp[i] = dp[i-1] + dp[i-2];
+        }
+        return dp[n-1];
+    }
+
+    //118. Pascal's Triangle
+    public static List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res = new ArrayList<>();
+        for (int i = 0; i < numRows; i++) {
+            List<Integer> row = new ArrayList<>();
+            row.add(1);
+            for (int j = 1; j < i; j++) {
+                row.add(res.get(i-1).get(j-1) + res.get(i-1).get(j));
+            }
+            if(i != 0) row.add(1);
+            res.add(row);
+        }
+        return res;
+    }
+
+    //119. Pascal's Triangle II
+    public List<Integer> getRow(int rowIndex) {
+        List<List<Integer>> res = new ArrayList<>();
+        for (int i = 0; i <= rowIndex; i++) {
+            List<Integer> row = new ArrayList<>();
+            row.add(1);
+            for (int j = 1; j < i; j++) {
+                row.add(res.get(i-1).get(j-1) + res.get(i-1).get(j));
+            }
+            if(i != 0) row.add(1);
+            res.add(row);
+        }
+        return res.get(rowIndex);
+    }
+
+    //120. Triangle
+    public static int minimumTotal(List<List<Integer>> triangle) {
+        int m = triangle.size();
+        int[][] dp = new int[m][m];
+        dp[0][0] = triangle.get(0).get(0);
+        for (int i = 1; i < triangle.size(); i++) {
+            dp[i][0] = dp[i-1][0] + triangle.get(i).get(0);
+            dp[i][i] = dp[i-1][i-1] + triangle.get(i).get(i);
+            for (int j = 1; j < i; j++) {
+                dp[i][j] = Math.min(dp[i-1][j], dp[i-1][j-1]) + triangle.get(i).get(j);
+            }
+        }
+        int min = dp[m-1][0];
+
+        for (int i = 1; i < m; i++) {
+            min = Math.min(min, dp[m-1][i]);
+        }
+        return min;
+    }
+
+
+
+    public class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+        TreeNode() {}
+        TreeNode(int val) { this.val = val; }
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
     public static void main(String[] args) {
-        int[][] test1 = {{1,3,1},{1,5,1},{4,2,1}};
-        int[][] test2 = {{1,2,3},{4,5,6}};
-        System.out.println(minPathSum(test1));
+
     }
 }
