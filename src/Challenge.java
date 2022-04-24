@@ -204,6 +204,112 @@ public class Challenge {
         }
         return dp[n];
     }
+    
+        //681. Next Closest Time
+    public static String nextClosestTime(String time) {
+        List<Character> digits = new ArrayList<>();
+        for(char digit : time.toCharArray()){
+            if (digit != ':'){
+                digits.add(digit);
+            }
+        }
+        Set<String> set = new HashSet<>();
+        for (int i = 0; i < digits.size(); i++) {
+            if(digits.get(i) > '2') continue;
+            for (int j = 0; j < digits.size(); j++) {
+                String hour = digits.get(i) + "" + digits.get(j);
+                if(Integer.parseInt(hour) > 23) continue;
+                for (int k = 0; k < digits.size(); k++) {
+                    if(digits.get(k) > '5') continue;
+                    for (int l = 0; l < digits.size(); l++) {
+                        String minute = digits.get(k) + "" + digits.get(l);
+                        String newTime = hour + ":" + minute;
+                        if (newTime.equals(time)) continue;
+                        if (set.contains(newTime)) continue;
+                        set.add(newTime);
+                    }
+                }
+            }
+        }
+        int min = 2500;
+        String res = "";
+        for(String i : set){
+            int diff = compareTime(time, i);
+            if(diff < min) {
+                min = diff;
+                res = i;
+            }
+        }
+
+        return res == "" ? time : res;
+    }
+
+    static int compareTime(String origin, String handle){
+        int HH1 = Integer.parseInt(origin.split(":")[0]);
+        int MM1 = Integer.parseInt(origin.split(":")[1]);
+        int HH2 = Integer.parseInt(handle.split(":")[0]);
+        int MM2 = Integer.parseInt(handle.split(":")[1]);
+        int H = 0;
+        int M = 0;
+        if(HH2-HH1 < 0) H = 24 + HH2 - HH1;
+        else H = HH2-HH1;
+        if(MM2 - MM1 < 0){
+            M = (60 + MM2 - MM1) % 60;
+            H -= 1;
+            if (H < 0) H += 24;
+        }else{
+            M = (MM2 - MM1) % 60;
+        }
+        return H * 100 + M;
+    }
+
+    //683. K Empty Slots
+    public static int kEmptySlots(int[] bulbs, int k) {
+        int n = bulbs.length;
+        int[] dp = new int[n];
+        for (int i = 0; i < n; i++) {
+            dp[bulbs[i] - 1] = 1;
+            if (checkBulb(dp, bulbs[i] - 1, k)) return i + 1;
+        }
+        return -1;
+    }
+
+    static boolean checkBulb(int[] dp, int i, int k){
+        if (i <= k && i + k >= dp.length - 1) return false;
+        if (i <= k){
+            if (dp[i + k + 1] == 1){
+                for (int j = i + 1; j < i + k + 1; j++) {
+                    if (dp[j] == 1) return false;
+                }
+                return true;
+            }
+            else return false;
+        }
+        if (i + k >= dp.length - 1){
+            if (dp[i - k - 1] == 1){
+                for (int j = i - k; j < i; j++) {
+                    if (dp[j] == 1) return false;
+                }
+                return true;
+            }
+            else return false;
+        }
+        else{
+            if (dp[i + k + 1] == 1){
+                for (int j = i + 1; j < i + k + 1; j++) {
+                    if (dp[j] == 1) return false;
+                }
+                return true;
+            }
+            else if (dp[i - k - 1] == 1){
+                for (int j = i - k; j < i; j++) {
+                    if (dp[j] == 1) return false;
+                }
+                return true;
+            }
+            return false;
+        }
+    }
 
 
     public static void main(String[] args) {
