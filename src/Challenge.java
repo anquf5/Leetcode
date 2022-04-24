@@ -159,6 +159,7 @@ public class Challenge {
         if(root.left == null && root.right == null) list.add(root.val);
     }
 
+    //1021. Remove Outermost Parentheses
     public static String removeOuterParentheses(String s) {
         Queue<Character> queue = new LinkedList<>();
         int open = 0;
@@ -184,6 +185,7 @@ public class Challenge {
         return res;
     }
 
+    // 1025. Divisor Game
     public static boolean divisorGame(int n) {
         boolean[] dp = new boolean[n+1];
         dp[0] = true;
