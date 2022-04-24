@@ -127,14 +127,85 @@ public class Challenge {
         }
         return max;
     }
+    
+    public int minCostClimbingStairs(int[] cost) {
+        int n = cost.length;
+        int[] dp = new int[n + 1];
+        dp[0] = 0;
+        dp[1] = 0;
+        for (int i = 2; i < n + 1; i++) {
+            dp[i] = Math.min(dp[i-1] + cost[i-1], dp[i-2] + cost[i-2]);
+        }
+        return dp[n];
+    }
+
+    public int sumOfLeftLeaves(TreeNode root) {
+        if (root.left == null && root.right == null) return 0;
+        Set<Integer> leftLeaf = new HashSet<>();
+        findLeftLeaf(root, leftLeaf);
+        while(root.right != null){
+            if(root.left == null && root.right == null) leftLeaf.remove(root.val);
+            else root = root.right;
+        }
+        return leftLeaf.stream().mapToInt(Integer::intValue).sum();
+
+    }
+
+    void findLeftLeaf(TreeNode root, Set<Integer> list){
+        if(root == null) return;
+        if(root.left != null) findLeftLeaf(root.left, list);
+        if(root.right != null && root.right.left != null) findLeftLeaf(root.right.left, list);
+        if(root.right != null && root.right.left == null && root.right.right == null) return;
+        if(root.left == null && root.right == null) list.add(root.val);
+    }
+
+    public static String removeOuterParentheses(String s) {
+        Queue<Character> queue = new LinkedList<>();
+        int open = 0;
+        int close = 0;
+        String res = "";
+        for (char c : s.toCharArray()) {
+            if(c == '(') {
+                open++;
+                queue.add(c);
+            }
+            if(c == ')') {
+                close++;
+                queue.add(c);
+            }
+            if(open == close){
+                String temp = "";
+                while(queue.size() > 0){
+                    temp += queue.remove();
+                }
+                res += temp.substring(1,temp.length()-1);
+            }
+        }
+        return res;
+    }
+
+    public static boolean divisorGame(int n) {
+        boolean[] dp = new boolean[n+1];
+        dp[0] = true;
+        dp[1] = false;
+        for (int i = 2; i <= n; i++) {
+            List<Integer> list = new ArrayList<>();
+            for (int j = 1; j < i; j++) {
+                if(i % j == 0) list.add(j);
+            }
+            int num = 0;
+            for (Integer j : list) {
+                if(dp[i-j]) num++;
+            }
+            if (num == list.size()) dp[i] = false;
+            else dp[i] = true;
+        }
+        return dp[n];
+    }
 
 
     public static void main(String[] args) {
-        int[] test1 = {1,2,1};
-        int[] test2 = {0,1,2,2};
-        int[] test3 = {1,2,3,2,2};
-        int[] test4 = {3,3,3,1,2,1,1,2,3,3,4};
-        System.out.println(totalFruit(test1));
+        System.out.println(divisorGame(2));
 
     }
 }
