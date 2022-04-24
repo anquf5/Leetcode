@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Challenge {
 
@@ -127,7 +128,8 @@ public class Challenge {
         }
         return max;
     }
-    
+
+    // 746. Min Cost Climbing Stairs
     public int minCostClimbingStairs(int[] cost) {
         int n = cost.length;
         int[] dp = new int[n + 1];
@@ -139,24 +141,25 @@ public class Challenge {
         return dp[n];
     }
 
+    //404. Sum of Left Leaves
     public int sumOfLeftLeaves(TreeNode root) {
-        if (root.left == null && root.right == null) return 0;
-        Set<Integer> leftLeaf = new HashSet<>();
-        findLeftLeaf(root, leftLeaf);
-        while(root.right != null){
-            if(root.left == null && root.right == null) leftLeaf.remove(root.val);
-            else root = root.right;
+        Queue<TreeNode> queue = new LinkedList();
+        queue.add(root);
+        int res = 0;
+        while (!queue.isEmpty()){
+            root = queue.poll();
+            if (root.left != null) {
+                queue.add(root.left);
+                if (isLeaf(root.left)) res += root.left.val;
+            }
+            if (root.right != null) queue.add(root.right);
         }
-        return leftLeaf.stream().mapToInt(Integer::intValue).sum();
-
+        return res;
     }
 
-    void findLeftLeaf(TreeNode root, Set<Integer> list){
-        if(root == null) return;
-        if(root.left != null) findLeftLeaf(root.left, list);
-        if(root.right != null && root.right.left != null) findLeftLeaf(root.right.left, list);
-        if(root.right != null && root.right.left == null && root.right.right == null) return;
-        if(root.left == null && root.right == null) list.add(root.val);
+    boolean isLeaf(TreeNode root){
+        if (root.left == null && root.right == null) return true;
+        else return false;
     }
 
     //1021. Remove Outermost Parentheses

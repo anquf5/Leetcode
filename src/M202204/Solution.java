@@ -773,7 +773,19 @@ class Solution {
         return min;
     }
 
+    //1696. Jump Game VI
+    public static int maxResult(int[] nums, int k) {
+        int n = nums.length;
+        int[] dp = new int[n];
+        dp[0] = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = i+1; j <= Math.min(n-1, i+k); j++) {
 
+                dp[j] = Math.max(dp[i]+nums[i], dp[j]);
+            }
+        }
+        return dp[n-1] + nums[n-1];
+    }
 
     public class TreeNode {
         int val;
@@ -789,6 +801,8 @@ class Solution {
     }
 
     public static void main(String[] args) {
-
+        int[] test1 = {1,-1,-2,4,-7,3};
+        int[] test2 = {1,-5,-20,4,-1,3,-6,-3};
+        System.out.println(maxResult(test2,2));
     }
 }
