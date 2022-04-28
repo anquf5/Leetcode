@@ -800,9 +800,101 @@ class Solution {
         }
     }
 
+    //04-26
+    //15. 3Sum
+    public static List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        int n = nums.length;
+        List<List<Integer>> res = new ArrayList<>();
+        if (n < 3) return new ArrayList<>();
+        if (n == 3) {
+            int sum = Arrays.stream(nums).sum();
+            if (sum == 0) {
+                res.add(Arrays.asList(nums[0],nums[1],nums[2]));
+            }
+        }
+        else{
+            for (int i = 0; i < n - 2; i++) {
+                if(i == 0 || nums[i - 1] != nums[i]){
+                    int lo = i + 1, hi = n-1;
+                    while(lo < hi){
+                        int sum = nums[i] + nums[lo] + nums[hi];
+                        if(sum == 0){
+                            res.add(Arrays.asList(nums[i], nums[lo++], nums[hi--]));
+                            while(lo<hi &&nums[lo] == nums[lo-1]) lo++;
+                        }
+                        else if(sum < 0){
+                            lo++;
+                        }
+                        else {hi--;}
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    // 04-27
+    //75. Sort Colors
+    public static void sortColors(int[] nums) {
+        int lo = 0, cur = 0, hi = nums.length - 1;
+        while(cur <= hi){
+            if(nums[cur] == 0){
+                swap(nums, lo, cur);
+                cur++;
+                lo++;
+            }
+            else if(nums[cur] == 2){
+                swap(nums, cur, hi);
+                hi--;
+            }else{
+                cur++;
+            }
+        }
+    }
+
+    static void swap(int[] nums, int a, int b){
+        int temp = nums[a];
+        nums[a] = nums[b];
+        nums[b] = temp;
+    }
+
+    //04-28
+    //279. Perfect Squares
+//    public static int numSquares(int n) {
+//        List<Integer> list = new ArrayList<>();
+//        for (int i = 1; i < n; i++) {
+//            if(i * i <= n) list.add(i*i);
+//        }
+//        int[] dp = new int[n + 1];
+//        dp[0] = 0;
+//        dp[1] = 1;
+//        for (int i = 2; i <= n; i++) {
+//            dp[i] = i;
+//            for (Integer squ : list) {
+//                if(i - squ >= 0){
+//                    dp[i] = Math.min(dp[i-squ] + 1, dp[i]);
+//                }
+//            }
+//        }
+//        return dp[n];
+//    }
+    // optimise approach 2
+    public static int numSquares(int n) {
+        int[] dp = new int[n + 1];
+        dp[0] = 0;
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            dp[i] = i;
+            for (int j = 1; j * j <= i; j++) {
+                dp[i] = Math.min(dp[i - j * j] + 1, dp[i]);
+            }
+        }
+        return dp[n];
+    }
+
     public static void main(String[] args) {
-        int[] test1 = {1,-1,-2,4,-7,3};
-        int[] test2 = {1,-5,-20,4,-1,3,-6,-3};
-        System.out.println(maxResult(test2,2));
+        System.out.println(numSquares(12));
+
     }
 }
