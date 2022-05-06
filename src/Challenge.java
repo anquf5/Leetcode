@@ -314,8 +314,68 @@ public class Challenge {
         }
     }
 
+    public static int searchInsert(int[] nums, int target) {
+        int l = 0, r = nums.length - 1;
+        if(target > nums[nums.length-1]) return nums.length;
+        while(l < r){
+            if(r - l == 1 && nums[r] > target && nums[l] < target) return r;
+            if(nums[r] == target) return r;
+            if(nums[l] == target) return l;
+            int m = (l + r) / 2;
+            if (nums[m] == target) return m;
+            else if (nums[m] > target) r = m;
+            else l = m;
+        }
+        return 0;
+    }
+
+    public static int findCircleNum(int[][] isConnected) {
+        boolean[] visit = new boolean[isConnected.length];
+        int res = 0;
+        for (int i = 0; i < isConnected.length; i++) {
+            if(!visit[i]) {
+                res++;
+                dfs(visit, i, isConnected);
+            }
+            else continue;
+        }
+        return res;
+    }
+
+    static void dfs(boolean[] visit, int index, int[][] isConnected){
+        if (visit[index]) return;
+        visit[index] = true;
+        for (int i = 0; i < isConnected[index].length; i++) {
+            if(isConnected[index][i] == 1 && i != index) dfs(visit, i, isConnected);
+            else continue;
+        }
+    }
+
+    public static int peakIndexInMountainArray(int[] arr) {
+        int l = 0, r = arr.length - 1;
+        while(l <= r){
+            if(l == r) return l;
+            int m = (l + r) / 2;
+            if(arr[m] > arr[l] && arr[m] > arr[r]){
+                l++;
+                r--;
+            }
+            else if(arr[m] > arr[l]){
+                r--;
+            }
+            else if(arr[m] < arr[r]){
+                l++;
+            }
+            else if(arr[l] > arr[r]) return l;
+            else if(arr[l] < arr[r]) return r;
+        }
+        return 0;
+    }
+
+
     public static void main(String[] args) {
-        System.out.println(divisorGame(2));
+        int[] test1 = {0,10,5,2};
+        System.out.println(peakIndexInMountainArray(test1));
 
     }
 }
