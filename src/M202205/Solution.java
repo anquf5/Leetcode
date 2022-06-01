@@ -350,17 +350,17 @@ class Solution {
 //    }
 
     //133. Clone Graph
-    Map<Node, Node> map = new HashMap<>();
-    public Node cloneGraph(Node node) {
-        if (node == null) return node;
-        if (map.containsKey(node)) return map.get(node);
-        Node copy = new Node(node.val);
-        map.put(node, copy);
-        for (Node n : node.neighbors){
-            copy.neighbors.add(cloneGraph(n));
-        }
-        return copy;
-    }
+//    Map<Node, Node> map = new HashMap<>();
+//    public Node cloneGraph(Node node) {
+//        if (node == null) return node;
+//        if (map.containsKey(node)) return map.get(node);
+//        Node copy = new Node(node.val);
+//        map.put(node, copy);
+//        for (Node n : node.neighbors){
+//            copy.neighbors.add(cloneGraph(n));
+//        }
+//        return copy;
+//    }
 
     //165. Compare Version Numbers
     public static int compareVersion(String version1, String version2) {
@@ -461,15 +461,132 @@ class Solution {
         return true;
     }
 
+    //05-07
+    //344. Reverse String
+    public void reverseString(char[] s) {
+        int l = 0, r = s.length - 1;
+        while(l < r){
+            char temp = s[l];
+            s[l++] = s[r];
+            s[r--] = temp;
+        }
+    }
+
+    //443. String Compression
+    public static int compress(char[] chars) {
+        if (chars.length == 1) return chars.length;
+        int res = 0;
+        int start = 0;
+        int cur = 0;
+        int i = 1;
+        while(i <= chars.length) {
+            if (i == chars.length || chars[i] != chars[start]){
+                chars[cur++] = chars[start];
+                if(i - start != 1){
+                    String count = i - start + "";
+                    for (char c : count.toCharArray()){
+                        chars[cur++] = c;
+                    }
+                    res += count.length();
+                }
+                res++;
+                start = i;
+            }
+            i++;
+        }
+        return res;
+    }
+
+    //05-29
+    // 343. Integer Break
+    public static int integerBreak(int n) {
+        int[] dp = new int[n + 1];
+        dp[0] = 0;
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            for (int j = 1; j < i; j++) {
+                dp[i] = Math.max(Math.max(j, dp[j]) * Math.max(i - j, dp[i - j]), dp[i]);
+            }
+        }
+        return dp[n];
+    }
+
+    //567. Permutation in String
+    public static boolean checkInclusion(String s1, String s2) {
+        int n1 = s1.length();
+        Map<Character, Integer> comp = new HashMap<>();
+        Map<Character, Integer> substring = new HashMap<>();
+        for (Character c : s1.toCharArray()) {
+            if (comp.containsKey(c)) comp.put(c, comp.get(c) +1);
+            else comp.put(c, 1);
+        }
+        int l = 0, r = 0;
+        while(r < s2.length()){
+            if (substring.containsKey(s2.charAt(r))) substring.put(s2.charAt(r), substring.get(s2.charAt(r))+1);
+            else substring.put(s2.charAt(r), 1);
+            if (r - l + 1 == n1) {
+                if (substring.equals(comp)) return true;
+                else {
+                    if (substring.get(s2.charAt(l)) == 1) substring.remove(s2.charAt(l));
+                    else substring.put(s2.charAt(l), substring.get(s2.charAt(l))-1);
+                    l++;
+                    r++;
+                }
+            }
+            else r++;
+        }
+        return false;
+    }
+
+    //46. Permutations
+    public static List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        ArrayList<Integer> group = new ArrayList<>();
+        backtrack(nums, group, res);
+        return res;
+    }
+
+    static void backtrack(int[] nums, ArrayList<Integer> group, List<List<Integer>> res){
+        if (group.size() == nums.length){
+            res.add(new ArrayList<>(group));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (group.contains(nums[i])) continue;
+            group.add(nums[i]);
+            backtrack(nums, group, res);
+            group.remove(group.size() - 1);
+        }
+    }
+
+    //532. K-diff Pairs in an Array
+    public static int findPairs(int[] nums, int k) {
+        Arrays.sort(nums);
+        int n = nums.length, cur = 0, i = 1, res = 0;
+        while (cur < n - 1){
+            if (nums[i] - nums[cur] == k){
+                res++;
+                if (nums[cur] == nums[cur+1]){
+                    cur++;
+                }
+                i = cur + 1;
+            }
+            else i++;
+            if (i == n){
+                cur++;
+                i = cur + 1;
+            }
+        }
+        return res;
+    }
 
 
 
-    public static void main(String[] args) {
-        String test1 = "aaabaa";
-        String test2 = "a";
-        String test3 = "ab";
-        String test4 = "abbab";
-        System.out.println(minCut(test4));
+
+    public static void main(String args[]) {
+        int[] test = {1,3,1,5,4};
+        System.out.println(findPairs(test,0));
+
 
     }
 }
